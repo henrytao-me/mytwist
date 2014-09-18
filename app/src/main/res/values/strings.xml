@@ -12,4 +12,12 @@
 
   <string name="action_search">Search</string>
 
+  <string-array name="drawer_list">
+    <item>Notes</item>
+    <item>Reminders</item>
+    <item>Archive</item>
+    <item>Trash</item>
+    <item>HELP FEEBACK</item>
+  </string-array>
+
 </resources>

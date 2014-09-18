@@ -4,27 +4,53 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
 
   public final static String EXTRA_MESSAGE = "me.henrytao.mytwist.MESSAGE";
 
+  private DrawerLayout mDrawerLayout;
+  private ListView mDrawerList;
+  private String[] mDrawerString;
+  private ActionBarDrawerToggle mDrawerToggle;
+  private CharSequence mDrawerTitle;
+  private CharSequence mTitle;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
     if (savedInstanceState == null) {
       getFragmentManager().beginTransaction()
           .add(R.id.container, new PlaceholderFragment())
           .commit();
     }
+
+    mDrawerTitle = mTitle = getTitle();
+
+    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+    mDrawerList = (ListView) findViewById(R.id.drawer_list);
+    mDrawerString = getResources().getStringArray(R.array.drawer_list);
+
+    mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mDrawerString));
+    mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+    mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable)
+
   }
 
 
@@ -50,6 +76,40 @@ public class MainActivity extends Activity {
   }
 
   /**
+   * activity method
+   */
+
+  public void sendMessage(View view) {
+    Intent intent = new Intent(this, DisplayMessageActivity.class);
+    EditText editText = (EditText) findViewById(R.id.edit_message);
+    String message = editText.getText().toString();
+    intent.putExtra(EXTRA_MESSAGE, message);
+    startActivity(intent);
+  }
+
+  /**
+   * DrawerItemClick listener
+   */
+  private class DrawerItemClickListener implements ListView.OnItemClickListener {
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+      onDrawerItemClick(position);
+    }
+  }
+
+  private void onDrawerItemClick(int position) {
+    /*Toast.makeText(this, mDrawerString[position] + " was selected", Toast.LENGTH_SHORT).show();*/
+    mDrawerList.setItemChecked(position, true);
+    setTitle(mDrawerString[position]);
+  }
+
+  @Override
+  public void setTitle(CharSequence title) {
+    super.setTitle(title);
+  }
+
+  /**
    * A placeholder fragment containing a simple view.
    */
   public static class PlaceholderFragment extends Fragment {
@@ -65,12 +125,5 @@ public class MainActivity extends Activity {
     }
   }
 
-  public void sendMessage(View view) {
-    Intent intent = new Intent(this, DisplayMessageActivity.class);
-    EditText editText = (EditText) findViewById(R.id.edit_message);
-    String message = editText.getText().toString();
-    intent.putExtra(EXTRA_MESSAGE, message);
-    startActivity(intent);
-  }
 
 }
