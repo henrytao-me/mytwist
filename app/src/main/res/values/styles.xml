@@ -2,7 +2,17 @@
 
   <!-- Base application theme. -->
   <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <item name="android:windowContentOverlay">@null</item>
+    <item name="android:actionBarStyle">@style/ActionBarStyle</item>
+    <item name="android:popupMenuStyle">@style/PopupMenuStyle</item>
+  </style>
+  
+  <style name="ActionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+    <item name="android:background">#ffc107</item>
+  </style>
 
+  <style name="PopupMenuStyle" parent="@android:style/Widget.Holo.Light.ListPopupWindow">
+    <!--<item name="android:popupBackground">@drawable/menu_dropdown_panel_example</item>-->
   </style>
 
 </resources>
