@@ -11,7 +11,9 @@
   <string name="title_activity_display_message">My Message</string>
 
   <string name="action_search">Search</string>
-
+  
+  <string name="drawer_open">Open Navigation Drawer</string>
+  <string name="drawer_close">Close Navigation Drawer</string>
   <string-array name="drawer_list">
     <item>Notes</item>
     <item>Reminders</item>

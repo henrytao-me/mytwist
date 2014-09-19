@@ -3,6 +3,7 @@ package me.henrytao.mytwist;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 
@@ -23,10 +25,15 @@ public class MainActivity extends Activity {
   public final static String EXTRA_MESSAGE = "me.henrytao.mytwist.MESSAGE";
 
   private DrawerLayout mDrawerLayout;
+
   private ListView mDrawerList;
+
   private String[] mDrawerString;
-  private ActionBarDrawerToggle mDrawerToggle;
+
+  private ActionBarDrawerToggle mDrawerListener;
+
   private CharSequence mDrawerTitle;
+
   private CharSequence mTitle;
 
   @Override
@@ -49,16 +56,28 @@ public class MainActivity extends Activity {
     mDrawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mDrawerString));
     mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-    mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable)
+    mDrawerListener = new ActionBarDrawerToggle(this, mDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
+      @Override
+      public void onDrawerOpened(View drawerView) {
+        super.onDrawerOpened(drawerView);
+      }
 
+      @Override
+      public void onDrawerClosed(View drawerView) {
+        super.onDrawerClosed(drawerView);
+      }
+    };
+    mDrawerLayout.setDrawerListener(mDrawerListener);
+
+    getActionBar().setHomeButtonEnabled(true);
+    getActionBar().setDisplayHomeAsUpEnabled(true);
   }
-
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.main, menu);
-    return true;
+    return super.onCreateOptionsMenu(menu);
   }
 
   @Override
@@ -66,6 +85,9 @@ public class MainActivity extends Activity {
     // Handle action bar item clicks here. The action bar will
     // automatically handle clicks on the Home/Up button, so long
     // as you specify a parent activity in AndroidManifest.xml.
+    if(mDrawerListener.onOptionsItemSelected(item)){
+      return true;
+    }
     switch (item.getItemId()) {
       case R.id.action_search:
         return true;
@@ -73,6 +95,18 @@ public class MainActivity extends Activity {
         return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public void onConfigurationChanged(Configuration newConfig) {
+    super.onConfigurationChanged(newConfig);
+    mDrawerListener.onConfigurationChanged(newConfig);
+  }
+
+  @Override
+  protected void onPostCreate(Bundle savedInstanceState) {
+    super.onPostCreate(savedInstanceState);
+    mDrawerListener.syncState();
   }
 
   /**
@@ -119,7 +153,7 @@ public class MainActivity extends Activity {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+        Bundle savedInstanceState) {
       View rootView = inflater.inflate(R.layout.fragment_main, container, false);
       return rootView;
     }
